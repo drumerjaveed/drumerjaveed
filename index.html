@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. Umer Javed — AI Strategy & Implementation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:      #ffffff;
+      --offwhite:   #faf9f6;
+      --cream:      #f3f0e8;
+      --gold:       #b8922a;
+      --gold-light: #d4aa45;
+      --gold-pale:  #f5e9c8;
+      --gold-rule:  #c9a84c;
+      --ink:        #1a1814;
+      --ink-mid:    #3d3830;
+      --ink-muted:  #7a7160;
+      --ink-faint:  #b5ae9f;
+      --surface:    #f7f4ee;
+      --border:     rgba(184,146,42,0.2);
+      --border-strong: rgba(184,146,42,0.45);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── DECORATIVE PATTERN ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(184,146,42,0.04) 0%, transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(184,146,42,0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 3rem;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      padding: 0.5rem 1.25rem;
+      background: var(--gold);
+      color: var(--white) !important;
+      border-radius: 4px;
+      font-weight: 600 !important;
+      letter-spacing: 0.05em !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--white) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 3rem 5rem;
+      overflow: hidden;
+      background: var(--offwhite);
+    }
+
+    /* Subtle gold grid pattern */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 70% 80% at 10% 50%, black 30%, transparent 100%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Gold diagonal accent */
+    .hero-accent {
+      position: absolute;
+      top: 0; right: 0;
+      width: 45%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 40%, var(--cream) 40%);
+      pointer-events: none;
+    }
+
+    .hero-accent-line {
+      position: absolute;
+      top: 0; right: 0;
+      width: 45%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-accent-line::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-left: 2px solid var(--gold-rule);
+      transform: skewX(-12deg) translateX(60%);
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 680px; }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow-line {
+      width: 40px;
+      height: 1.5px;
+      background: var(--gold);
+    }
+
+    .eyebrow-text {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: clamp(3.2rem, 6.5vw, 5.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 1.75rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--ink-muted);
+      line-height: 1.8;
+      max-width: 500px;
+      margin-bottom: 3rem;
+      border-left: 2px solid var(--gold-rule);
+      padding-left: 1.25rem;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.85rem 2rem;
+      background: var(--gold);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--ink-mid);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-1px); }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; padding: 6rem 3rem; }
+
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-eyebrow .eyebrow-line { width: 28px; }
+
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+    }
+
+    .section-intro {
+      font-size: 1rem;
+      color: var(--ink-muted);
+      line-height: 1.8;
+      max-width: 560px;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex;
+      background: var(--ink);
+      margin: 0 3rem;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-item {
+      flex: 1;
+      padding: 2.25rem 1.5rem;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      position: relative;
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ABOUT ── */
+    .about-section { background: var(--offwhite); }
+
+    .about-grid { display: grid; grid-template-columns: 1fr 1.8fr; gap: 6rem; align-items: start; }
+
+    .about-avatar {
+      aspect-ratio: 3/4;
+      border-radius: 4px;
+      background: var(--cream);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* corner ornaments */
+    .about-avatar::before, .about-avatar::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .about-avatar::before { top: 12px; left: 12px; border-width: 1.5px 0 0 1.5px; }
+    .about-avatar::after  { bottom: 12px; right: 12px; border-width: 0 1.5px 1.5px 0; }
+
+    .avatar-initials {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .avatar-title {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── SERVICES GRID ── */
+    .services-section { background: var(--white); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .service-card {
+      background: var(--white);
+      padding: 2.5rem 2rem;
+      transition: background 0.25s;
+    }
+    .service-card:hover { background: var(--offwhite); }
+
+    .service-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 400;
+      color: var(--gold-pale);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.01em;
+    }
+
+    .service-divider {
+      width: 32px;
+      height: 1.5px;
+      background: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .service-card p {
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+      line-height: 1.8;
+    }
+
+    /* ── EXPERTISE TAGS ── */
+    .expertise-section { background: var(--cream); }
+
+    .expertise-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      font-weight: 400;
+      padding: 0.45rem 1.1rem;
+      border-radius: 2px;
+      border: 1px solid var(--border-strong);
+      color: var(--ink-mid);
+      background: var(--white);
+      letter-spacing: 0.03em;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tag:hover { background: var(--gold-pale); color: var(--gold); border-color: var(--gold); }
+
+    .tag.highlight {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    /* ── PROCESS STEPS ── */
+    .process-section { background: var(--offwhite); }
+
+    .process-steps { display: flex; flex-direction: column; }
+
+    .step {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 2rem;
+      padding: 2.25rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    .step:last-child { border-bottom: none; }
+
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 400;
+      color: var(--gold-pale);
+      line-height: 1;
+    }
+
+    .step h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+
+    .step p { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.8; }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      background: var(--ink);
+      padding: 5rem 3rem;
+      margin: 0 3rem 6rem;
+      border-radius: 6px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .contact-section::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 3rem; right: 3rem;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+
+    .contact-section h2 { color: var(--white); }
+
+    .contact-section .section-intro {
+      color: rgba(255,255,255,0.45);
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.25rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(184,146,42,0.2);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--white);
+      font-size: 0.88rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .contact-link:hover { border-color: var(--gold); background: rgba(184,146,42,0.08); }
+
+    .contact-link-icon {
+      width: 38px; height: 38px;
+      border-radius: 4px;
+      background: rgba(184,146,42,0.12);
+      border: 1px solid rgba(184,146,42,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-link-label { font-weight: 500; margin-bottom: 2px; }
+    .contact-link-sub { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2.5rem 3rem;
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+      border-top: 1px solid var(--border);
+      letter-spacing: 0.05em;
+    }
+
+    footer span { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .stats-bar { flex-direction: column; margin: 0 1.5rem; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .stat-item:last-child { border-bottom: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-avatar { aspect-ratio: 1/1; max-width: 260px; margin: 0 auto; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-section { padding: 3rem 1.5rem; margin: 0 1.5rem 4rem; }
+      .hero { padding: 8rem 1.5rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Dr. Umer <span>Javed</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#expertise">Expertise</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact" class="nav-cta">Work With Me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-accent"></div>
+  <div class="hero-accent-line"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <div class="eyebrow-text">PhD · AI/ML · Available for Engagements</div>
+    </div>
+    <h1>Helping Organisations<br><em>Lead with AI.</em></h1>
+    <p class="hero-sub">
+      I'm Dr. Umer Javed — AI strategist, implementation lead, and auditor. I bridge the gap between cutting-edge research and real-world business transformation.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Work With Me →</a>
+      <a href="#services" class="btn-outline">View Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">PhD</div>
+    <div class="stat-label">AI / Machine Learning</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">3</div>
+    <div class="stat-label">Core Service Pillars</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">End-to-End</div>
+    <div class="stat-label">Implementation Capability</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">Audit</div>
+    <div class="stat-label">AI Governance & Compliance</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="about-section" style="padding-top: 7rem;">
+  <div class="about-grid">
+    <div class="about-avatar">
+      <div class="avatar-initials">UJ</div>
+      <div class="avatar-title">Dr. Umer Javed</div>
+    </div>
+    <div>
+      <div class="section-eyebrow">
+        <div class="eyebrow-line"></div>
+        <div class="section-label">About</div>
+      </div>
+      <h2>Researcher.<br>Practitioner.<br>Educator.</h2>
+      <p class="section-intro" style="margin-bottom: 1.5rem;">
+        With a PhD in Artificial Intelligence and Machine Learning, I work at the intersection of research rigour and practical execution. My focus is helping leadership teams understand, implement, and govern AI systems — responsibly and effectively.
+      </p>
+      <p style="font-size: 0.9rem; color: var(--ink-muted); line-height: 1.85; margin-bottom: 1.5rem;">
+        I've guided organisations through the full AI adoption lifecycle — from readiness assessments and strategy design, through tool selection, workflow integration, and team enablement. I also conduct independent AI audits to ensure your systems are explainable, fair, and aligned with your risk appetite.
+      </p>
+      <p style="font-size: 0.9rem; color: var(--ink-muted); line-height: 1.85;">
+        Whether you're a C-suite leader cautiously eyeing AI adoption, or a team already in the weeds of implementation, I bring clarity, structure, and hands-on expertise to every engagement.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services-section">
+  <div class="section-eyebrow">
+    <div class="eyebrow-line"></div>
+    <div class="section-label">What I Do</div>
+  </div>
+  <h2>Services</h2>
+  <p class="section-intro">Three tightly focused offerings designed to meet organisations at their exact stage of the AI journey.</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <h3>AI Implementation Lead</h3>
+      <div class="service-divider"></div>
+      <p>I design and oversee end-to-end AI integration into your workflows — from architecture and tool selection to change management and go-live. You get a senior technical partner who speaks both the language of business outcomes and engineering constraints.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <h3>AI Audit & Governance</h3>
+      <div class="service-divider"></div>
+      <p>Independent assessment of your existing or planned AI systems for bias, explainability, data quality, security posture, and regulatory alignment. I deliver actionable audit reports your board can trust and your teams can act on.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <h3>AI Consulting & Training</h3>
+      <div class="service-divider"></div>
+      <p>Bespoke workshops and advisory programmes that upskill your teams — from AI literacy sessions for executives to hands-on implementation training for practitioners. I tailor depth and focus to your industry, role, and readiness level.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise" class="expertise-section">
+  <div class="section-eyebrow">
+    <div class="eyebrow-line"></div>
+    <div class="section-label">Domain Knowledge</div>
+  </div>
+  <h2>Expertise</h2>
+  <p class="section-intro">Spanning theory and applied work across the AI/ML landscape.</p>
+
+  <div class="expertise-cloud">
+    <span class="tag highlight">Large Language Models (LLMs)</span>
+    <span class="tag highlight">AI Strategy & Roadmapping</span>
+    <span class="tag highlight">AI Auditing & Ethics</span>
+    <span class="tag">Machine Learning</span>
+    <span class="tag">Deep Learning</span>
+    <span class="tag">Natural Language Processing</span>
+    <span class="tag">Computer Vision</span>
+    <span class="tag">Generative AI</span>
+    <span class="tag">RAG & Knowledge Systems</span>
+    <span class="tag">AI Governance Frameworks</span>
+    <span class="tag">Explainable AI (XAI)</span>
+    <span class="tag">Workflow Automation</span>
+    <span class="tag">Data Strategy</span>
+    <span class="tag">Change Management</span>
+    <span class="tag">Executive Education</span>
+    <span class="tag">Research Methodology</span>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="process-section">
+  <div class="section-eyebrow">
+    <div class="eyebrow-line"></div>
+    <div class="section-label">How I Work</div>
+  </div>
+  <h2>Engagement Process</h2>
+  <p class="section-intro">A structured approach that removes ambiguity and maximises value from day one.</p>
+
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div>
+        <h3>Discovery Call</h3>
+        <p>A focused conversation to understand your organisation's context, goals, pain points, and current AI maturity. No obligation — just clarity on whether there's a fit and what shape the engagement might take.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div>
+        <h3>Readiness Assessment</h3>
+        <p>A structured review of your data infrastructure, team capabilities, existing tools, and strategic priorities. This forms the foundation of a realistic and responsible AI roadmap.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div>
+        <h3>Strategy & Design</h3>
+        <p>Co-creating an implementation plan or audit scope with your leadership team — with clear milestones, success metrics, and risk mitigations built in from the start.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div>
+        <h3>Execution & Enablement</h3>
+        <p>Hands-on delivery: leading implementation, conducting the audit, or running workshops — with regular progress checkpoints and documentation throughout.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">05</div>
+      <div>
+        <h3>Review & Handover</h3>
+        <p>A thorough debrief, final deliverables, and a clear path for your team to maintain and build on the work independently. I measure success by your self-sufficiency, not dependency on me.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div id="contact" class="contact-section">
+  <div class="contact-grid">
+    <div>
+      <div class="section-eyebrow">
+        <div class="eyebrow-line"></div>
+        <div class="section-label">Get In Touch</div>
+      </div>
+      <h2 style="margin-bottom: 1.25rem;">Let's talk about your AI ambitions.</h2>
+      <p class="section-intro" style="margin-bottom: 0;">
+        Whether you're exploring AI for the first time or navigating a complex implementation, I'd love to hear where you are and where you want to go. Reach out — I typically respond within 48 hours.
+      </p>
+    </div>
+    <div>
+      <div class="contact-links">
+        <a href="https://www.linkedin.com/in/dr-umer-javed/" target="_blank" class="contact-link">
+          <div class="contact-link-icon">💼</div>
+          <div>
+            <div class="contact-link-label">LinkedIn</div>
+            <div class="contact-link-sub">linkedin.com/in/dr-umer-javed</div>
+          </div>
+        </a>
+        <a href="mailto:hello@youremaildomain.com" class="contact-link">
+          <div class="contact-link-icon">✉️</div>
+          <div>
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-sub">hello@youremaildomain.com</div>
+          </div>
+        </a>
+        <a href="#" class="contact-link">
+          <div class="contact-link-icon">📅</div>
+          <div>
+            <div class="contact-link-label">Book a Discovery Call</div>
+            <div class="contact-link-sub">30 min · no obligation</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 <span>Dr. Umer Javed</span> &nbsp;·&nbsp; AI Strategy, Implementation & Audit
+</footer>
+
+</body>
+</html>
